@@ -58,16 +58,17 @@ public class DefaultHandler : IAsyncHandler<Default>
         var testContent = await File.ReadAllTextAsync(testProjectFile);
         testContent = content.IndexOf("appveyor") < 0 ? testContent.Replace("<PackageReference Include=\"AutoFixture\" Version=\"4.18.1\" />",
             """
-            <PackageReference Include=\"AutoFixture\" Version=\"4.18.1\" />
-            <PackageReference Include="appveyor.testlogger" Version="2.0.0" />
-            <PackageReference Include="coverlet.msbuild" Version="2.9.0">
-              <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-              <PrivateAssets>all</PrivateAssets>    
-            </PackageReference>            
-            """.ReplaceLineEndings());
+            <PackageReference Include="AutoFixture" Version="4.18.1" />
+                <PackageReference Include="appveyor.testlogger" Version="2.0.0" />
+                <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+                  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+                  <PrivateAssets>all</PrivateAssets>    
+                </PackageReference>            
+            """.ReplaceLineEndings())
+            : testContent;
 
         await File.WriteAllTextAsync(testProjectFile, testContent);
-        
+
         return 0;
     }
 
