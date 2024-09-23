@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <SnkFile>../../LSL.snk</SnkFile>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="Exists('$(SnkFile)')">
+        <AssemblyOriginatorKeyFile>$(SnkFile)</AssemblyOriginatorKeyFile>
+        <SignAssembly>True</SignAssembly>      
+    </PropertyGroup>
+          
+    <PropertyGroup>
+      <OutputType>Exe</OutputType>
+      <TargetFramework>net6.0</TargetFramework>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+      <LangVersion>10</LangVersion>
+      <PackAsTool>true</PackAsTool>
+      <ToolCommandName>mytool</ToolCommandName>
+      <PackageId>LSL.MyToolSetup.Tool</PackageId>
+      <Version>1.0.0</Version>
+      <PackageVersion>1.0.0</PackageVersion>
+      <PackageTags>dotnet-tool;tool;cli;dotnet;LSL.MyToolSetup.Tool</PackageTags>
+      <PackageReadmeFile>readme.md</PackageReadmeFile>
+      <PackageDescription>Description here</PackageDescription>
+      <Authors>alunacjones</Authors>
+      <RepositoryUrl>https://github.com/alunacjones/${WorkingFolder}</RepositoryUrl>
+      <PackageProjectUrl>https://github.com/alunacjones/${WorkingFolder}</PackageProjectUrl>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser.DependencyInjection" Version="1.1.1" />
+      <PackageReference Include="LSL.AbstractConsole.ServiceProvider" Version="1.0.1" />
+      <PackageReference Include="LSL.Tool.Logger" Version="1.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="..\..\readme.md" Pack="true" PackagePath=""/>
+    </ItemGroup>  
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\**\*.*" />
+    </ItemGroup>  
+  </Project>
