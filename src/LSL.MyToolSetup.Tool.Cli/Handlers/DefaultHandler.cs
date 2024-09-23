@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 
 namespace LSL.MyToolSetup.Tool.Cli.Handlers;
 
@@ -7,21 +8,24 @@ public class DefaultHandler : IAsyncHandler<Default>
 {
     private readonly IConsole _console;
     private readonly ILogger<DefaultHandler> _logger;
+    private readonly string _currentDirectory;
 
-    public DefaultHandler(IConsole console, ILogger<DefaultHandler> logger)
+    public DefaultHandler(
+        IConsole console,
+        ILogger<DefaultHandler> logger,
+        IOptions<CommandLineOptions> options)
     {
         _console = console;
         _logger = logger;
+        _currentDirectory = options.Value.CurrentDirectory;
     }
 
     public async Task<int> ExecuteAsync(Default _)
     {
-        var basePath = Directory.GetCurrentDirectory();
+        string ToAbolsutePath(string path) => Path.Join(_currentDirectory, path);
+        string ToRelativePath(string path) => path.Replace(_currentDirectory, string.Empty).TrimStart('\\');
 
-        string ToAbolsutePath(string path) => Path.Join(basePath, path);
-        string ToRelativePath(string path) => path.Replace(basePath, string.Empty).TrimStart('\\');
-
-        var copy = CopyResourceToOutputBuilder(basePath);
+        var copy = CopyResourceToOutputBuilder(_currentDirectory);
         await copy("appveyor.yml", "appveyor.yml");
         await copy("LSL.snk.enc", "LSL.snk.enc");
         var projectFolder = ToRelativePath(Directory.GetDirectories(ToAbolsutePath("src"), "*.Cli").First());
@@ -30,7 +34,7 @@ public class DefaultHandler : IAsyncHandler<Default>
         var testProjectFile = Directory.GetFiles(ToAbolsutePath(testProjectFolder), "*.csproj").First();
 
         // Update project file
-        var name = new DirectoryInfo(basePath).Name;
+        var name = new DirectoryInfo(_currentDirectory).Name;
         var content = await File.ReadAllTextAsync(projectFile);
         content = content.IndexOf("LSL.snk") < 0 ? content.Replace("<Project Sdk=\"Microsoft.NET.Sdk\">",
             """

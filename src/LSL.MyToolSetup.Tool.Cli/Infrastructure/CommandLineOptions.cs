@@ -10,4 +10,6 @@ public class CommandLineOptions
     /// </summary>
     /// <value></value>
     public string[] Arguments { get; set; } = default!;
+
+    public string CurrentDirectory { get; set; } = Directory.GetCurrentDirectory();
 }
