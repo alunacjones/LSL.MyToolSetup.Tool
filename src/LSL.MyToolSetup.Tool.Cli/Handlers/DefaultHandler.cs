@@ -70,7 +70,7 @@ public class DefaultHandler : IAsyncHandler<Default>
             var output = GetStream(name);
             
             var fullPath = Path.Combine(basePath, destinationPath);
-            using var fs = File.OpenWrite(fullPath);
+            using var fs = File.Create(fullPath);
 
             await output.CopyToAsync(fs);
 
