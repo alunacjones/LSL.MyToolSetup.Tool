@@ -1,5 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <SnkFile>../../LSL.snk</SnkFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="Exists('$(SnkFile)')">
+    <AssemblyOriginatorKeyFile>$(SnkFile)</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -13,9 +22,9 @@
     <PackageTags>dotnet-tool;tool;cli;dotnet;LSL.MyToolSetup.Tool</PackageTags>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageDescription>Description here</PackageDescription>
-    <Authors>authors-here</Authors>
-    <RepositoryUrl>https://github.com/your/repo-url</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/your/project-url</PackageProjectUrl>
+    <Authors>alunacjones</Authors>
+    <RepositoryUrl>https://github.com/alunacjones/LSL.MyToolSetup.Tool</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/alunacjones/LSL.MyToolSetup.Tool</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser.DependencyInjection" Version="1.1.1" />

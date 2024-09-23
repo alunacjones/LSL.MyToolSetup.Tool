@@ -29,25 +29,27 @@ public class DefaultHandler : IAsyncHandler<Default>
 
         var name = new DirectoryInfo(basePath).Name;
         var content = await File.ReadAllTextAsync(projectFile);
-        content = content.Replace("<Project Sdk=\"Microsoft.NET.Sdk\">",
+        content = content.IndexOf("LSL.snk") < 0 ? content.Replace("<Project Sdk=\"Microsoft.NET.Sdk\">",
             """
             <Project Sdk="Microsoft.NET.Sdk">
-                <PropertyGroup>
-                    <SnkFile>../../LSL.snk</SnkFile>
-                </PropertyGroup>
+              <PropertyGroup>
+                <SnkFile>../../LSL.snk</SnkFile>
+              </PropertyGroup>
 
-                <PropertyGroup Condition="Exists('$(SnkFile)')">
-                    <AssemblyOriginatorKeyFile>$(SnkFile)</AssemblyOriginatorKeyFile>
-                    <SignAssembly>True</SignAssembly>
-                </PropertyGroup>
+              <PropertyGroup Condition="Exists('$(SnkFile)')">
+                <AssemblyOriginatorKeyFile>$(SnkFile)</AssemblyOriginatorKeyFile>
+                <SignAssembly>True</SignAssembly>
+              </PropertyGroup>
             
             """.ReplaceLineEndings()
         )
-        .Replace("<Authors>authors-here</Authors>", "<Authors>alunacjones</Authors>")
-        .Replace("<RepositoryUrl>https://github.com/your/repo-url</RepositoryUrl>", $"<RepositoryUrl>https://github.com/alunacjones/{name}</RepositoryUrl>")
-        .Replace("<PackageProjectUrl>https://github.com/your/project-url</PackageProjectUrl>", $"<PackageProjectUrl>https://github.com/alunacjones/{name}</PackageProjectUrl>");
+        : content;
 
-        await File.WriteAllTextAsync(projectFile, content.Replace("${WorkingFolder}", new DirectoryInfo(basePath).Name));
+        content = content.Replace("<Authors>authors-here</Authors>", "<Authors>alunacjones</Authors>")
+            .Replace("<RepositoryUrl>https://github.com/your/repo-url</RepositoryUrl>", $"<RepositoryUrl>https://github.com/alunacjones/{name}</RepositoryUrl>")
+            .Replace("<PackageProjectUrl>https://github.com/your/project-url</PackageProjectUrl>", $"<PackageProjectUrl>https://github.com/alunacjones/{name}</PackageProjectUrl>");
+
+        await File.WriteAllTextAsync(projectFile, content);
         
         return 0;
     }
