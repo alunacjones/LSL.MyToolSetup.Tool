@@ -56,7 +56,7 @@ public class DefaultHandler : IAsyncHandler<Default>
         
         // Update Test File
         var testContent = await File.ReadAllTextAsync(testProjectFile);
-        testContent = content.IndexOf("appveyor") < 0 ? testContent.Replace("<PackageReference Include=\"AutoFixture\" Version=\"4.18.1\" />",
+        testContent = testContent.IndexOf("appveyor") < 0 ? testContent.Replace("<PackageReference Include=\"AutoFixture\" Version=\"4.18.1\" />",
             """
             <PackageReference Include="AutoFixture" Version="4.18.1" />
                 <PackageReference Include="appveyor.testlogger" Version="2.0.0" />
