@@ -26,7 +26,10 @@ public class DefaultHandler : IAsyncHandler<Default>
         await copy("LSL.snk.enc", "LSL.snk.enc");
         var projectFolder = ToRelativePath(Directory.GetDirectories(ToAbolsutePath("src"), "*.Cli").First());
         var projectFile = Directory.GetFiles(ToAbolsutePath(projectFolder), "*.csproj").First();
+        var testProjectFolder = ToRelativePath(Directory.GetDirectories(ToAbolsutePath("test"), "*.Tests").First());
+        var testProjectFile = Directory.GetFiles(ToAbolsutePath(testProjectFolder), "*.csproj").First();
 
+        // Update project file
         var name = new DirectoryInfo(basePath).Name;
         var content = await File.ReadAllTextAsync(projectFile);
         content = content.IndexOf("LSL.snk") < 0 ? content.Replace("<Project Sdk=\"Microsoft.NET.Sdk\">",
@@ -50,6 +53,20 @@ public class DefaultHandler : IAsyncHandler<Default>
             .Replace("<PackageProjectUrl>https://github.com/your/project-url</PackageProjectUrl>", $"<PackageProjectUrl>https://github.com/alunacjones/{name}</PackageProjectUrl>");
 
         await File.WriteAllTextAsync(projectFile, content);
+        
+        // Update Test File
+        var testContent = await File.ReadAllTextAsync(testProjectFile);
+        testContent = content.IndexOf("appveyor") < 0 ? testContent.Replace("<PackageReference Include=\"AutoFixture\" Version=\"4.18.1\" />",
+            """
+            <PackageReference Include=\"AutoFixture\" Version=\"4.18.1\" />
+            <PackageReference Include="appveyor.testlogger" Version="2.0.0" />
+            <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+              <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+              <PrivateAssets>all</PrivateAssets>    
+            </PackageReference>            
+            """.ReplaceLineEndings());
+
+        await File.WriteAllTextAsync(testProjectFile, testContent);
         
         return 0;
     }
