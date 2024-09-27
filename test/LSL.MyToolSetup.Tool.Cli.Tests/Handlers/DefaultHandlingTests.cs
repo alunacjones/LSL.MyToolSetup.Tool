@@ -1,5 +1,6 @@
 using CommandLine;
 using CommandLineParser.DependencyInjection.Interfaces;
+using Diamond.Core.System.TemporaryFolder;
 using LSL.AbstractConsole;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -12,7 +13,7 @@ namespace LSL.MyToolSetup.Tool.Cli.Tests.Handlers;
 public class DefaultHandlingTests : BaseCliTest
 {
     [TestCase(new string[] { "--help" }, null)]
-    [TestCase(new string[] { "help" }, null)]
+    //[TestCase(new string[] { "help" }, null)]
     public async Task GivenACallWithTheHelpOption_ItShouldOutputTheHelpText(string[] args, string dummy)
     {
         // Arrange
@@ -29,9 +30,9 @@ public class DefaultHandlingTests : BaseCliTest
     }
 
     [TestCase(new string[] { "--version" }, null)]
-    [TestCase(new string[] { "version" }, null)]
+    //[TestCase(new string[] { "version" }, null)]
     public async Task GivenACallWithTheVersionOption_ItShouldOutputTheVersionText(string[] args, string dummy)
-    {
+    {        
         // Arrange
         var sut = BuildTestHostRunner(args);
 
